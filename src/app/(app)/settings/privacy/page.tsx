@@ -56,15 +56,21 @@ export default function PrivacySettingsPage() {
 
   // Account deletion
   const handleDeleteAccount = async () => {
+    if (!confirm('Hesabınızı ve tüm bebek verilerini kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) return
     setDeleting(true)
     try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
+      document.cookie = 'pikibu_demo_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
       localStorage.clear()
-      router.push('/login')
+      sessionStorage.clear()
+      try {
+        const supabase = createClient()
+        await supabase.auth.signOut()
+      } catch (e) {}
+      await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+      window.location.href = '/login'
     } catch (e) {
       console.error(e)
-      setDeleting(false)
+      window.location.href = '/login'
     }
   }
 

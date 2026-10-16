@@ -15,13 +15,31 @@ export default function SettingsPage() {
     setLoggingOut(true)
 
     try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
-      router.push('/login')
-      router.refresh() // Clear client-side router cache
+      // 1. Clear demo cookie on client
+      document.cookie = 'pikibu_demo_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
+      localStorage.removeItem('pikibu_demo_session')
+      sessionStorage.clear()
+
+      // 2. Client-side Supabase sign out
+      try {
+        const supabase = createClient()
+        await supabase.auth.signOut()
+      } catch (e) {
+        console.warn('Supabase client signout error:', e)
+      }
+
+      // 3. Server-side session & cookies cleanup
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' })
+      } catch (e) {
+        console.warn('Logout API call error:', e)
+      }
+
+      // 4. Hard navigate to login to clear all in-memory routers/caches
+      window.location.href = '/login'
     } catch (error) {
       console.error('Logout error:', error)
-      setLoggingOut(false)
+      window.location.href = '/login'
     }
   }
 

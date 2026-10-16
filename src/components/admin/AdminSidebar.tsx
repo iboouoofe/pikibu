@@ -90,7 +90,17 @@ export default function AdminSidebar() {
           <Settings size={18} />
           Ayarlar
         </Link>
-        <button className="sidebar-nav-item" style={{ color: '#F87171' }}>
+        <button
+          onClick={async () => {
+            document.cookie = 'pikibu_demo_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT;'
+            try {
+              await fetch('/api/auth/logout', { method: 'POST' })
+            } catch (e) {}
+            window.location.href = '/login'
+          }}
+          className="sidebar-nav-item"
+          style={{ color: '#F87171', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}
+        >
           <LogOut size={18} />
           Çıkış Yap
         </button>

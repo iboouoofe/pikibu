@@ -127,11 +127,18 @@ export async function signup(formData: FormData) {
 export async function logout() {
   try {
     const cookieStore = await cookies()
+    cookieStore.set('pikibu_demo_session', '', {
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0),
+    })
     cookieStore.delete('pikibu_demo_session')
     const supabase = await createClient()
     await supabase.auth.signOut()
   } catch (e) {
     console.warn('Logout notice:', e)
   }
+  revalidatePath('/', 'layout')
   redirect('/login')
 }
+
