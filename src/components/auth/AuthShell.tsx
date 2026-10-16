@@ -1,23 +1,52 @@
 import Link from 'next/link'
 
-/** Minimal brand mark used across auth & onboarding screens. */
-export function BrandMark({ size = 56 }: { size?: number }) {
+/** Radiant, warm and iconic Pikibu brand mark */
+export function BrandMark({ size = 58 }: { size?: number }) {
   return (
     <div
       aria-hidden
       style={{
-        width: size, height: size, borderRadius: size * 0.28,
-        background: 'var(--ink)', color: 'var(--ink-contrast)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.18)',
-        position: 'relative', overflow: 'hidden',
+        width: size,
+        height: size,
+        borderRadius: size * 0.32,
+        background: 'linear-gradient(135deg, #FF6B8B 0%, #FF8E53 50%, #FFA07A 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 14px 32px -6px rgba(255, 107, 139, 0.48), 0 6px 16px -3px rgba(255, 142, 83, 0.35)',
+        position: 'relative',
+        overflow: 'hidden',
+        border: '1.5px solid rgba(255, 255, 255, 0.5)',
+        flexShrink: 0,
       }}
     >
-      <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="9" cy="11" r="1.3" fill="currentColor" />
-        <circle cx="15" cy="11" r="1.3" fill="currentColor" />
-        <path d="M9 15.2c1.6 1.3 4.4 1.3 6 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      {/* Gloss highlight reflection */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '48%',
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0.45), rgba(255,255,255,0))',
+          borderRadius: `${size * 0.32}px ${size * 0.32}px 0 0`,
+          pointerEvents: 'none',
+        }}
+      />
+
+      <svg width={size * 0.58} height={size * 0.58} viewBox="0 0 24 24" fill="none" style={{ position: 'relative', zIndex: 1 }}>
+        {/* Baby head */}
+        <circle cx="12" cy="12.5" r="8.5" fill="rgba(255, 255, 255, 0.15)" stroke="#FFFFFF" strokeWidth="2" />
+        {/* Baby hair curl */}
+        <path d="M12 4C11.5 2.5 13 1.8 13.8 2.5C14.4 3.1 13.8 4 12 4" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" />
+        {/* Joyful closed/happy eyes */}
+        <path d="M8 11.5C8.8 10.6 10 10.6 10.5 11.5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+        <path d="M13.5 11.5C14 10.6 15.2 10.6 16 11.5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+        {/* Rosy cheeks */}
+        <circle cx="7.2" cy="13.8" r="1.6" fill="rgba(255, 255, 255, 0.45)" />
+        <circle cx="16.8" cy="13.8" r="1.6" fill="rgba(255, 255, 255, 0.45)" />
+        {/* Sweet baby smile */}
+        <path d="M9.5 15C10.5 16.5 13.5 16.5 14.5 15" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
       </svg>
     </div>
   )
@@ -32,31 +61,145 @@ export function AuthShell({
   footer?: React.ReactNode
 }) {
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg-base)', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-      {/* Ambient glow */}
+    <div style={{
+      minHeight: '100dvh',
+      background: 'var(--bg-base)',
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Warm ambient multi-color lighting */}
       <div aria-hidden style={{
-        position: 'absolute', top: '-180px', left: '50%', transform: 'translateX(-50%)',
-        width: '560px', height: '420px', borderRadius: '50%',
-        background: 'radial-gradient(closest-side, rgba(41,151,255,0.16), rgba(94,92,230,0.08) 55%, transparent)',
-        filter: 'blur(10px)', pointerEvents: 'none', animation: 'glow 8s ease-in-out infinite',
+        position: 'absolute',
+        top: '-160px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '640px',
+        height: '480px',
+        borderRadius: '50%',
+        background: 'radial-gradient(closest-side, rgba(255,107,139,0.20), rgba(255,142,83,0.12) 40%, rgba(94,92,230,0.06) 70%, transparent)',
+        filter: 'blur(30px)',
+        pointerEvents: 'none',
+      }} />
+
+      <div aria-hidden style={{
+        position: 'absolute',
+        bottom: '-100px',
+        right: '-100px',
+        width: '360px',
+        height: '360px',
+        borderRadius: '50%',
+        background: 'radial-gradient(closest-side, rgba(255,194,102,0.15), transparent 70%)',
+        filter: 'blur(40px)',
+        pointerEvents: 'none',
       }} />
 
       <div style={{
-        position: 'relative', flex: 1, width: '100%', maxWidth: '400px', margin: '0 auto',
-        padding: 'calc(env(safe-area-inset-top, 0px) + 64px) 24px 40px',
-        display: 'flex', flexDirection: 'column',
+        position: 'relative',
+        flex: 1,
+        width: '100%',
+        maxWidth: '440px',
+        margin: '0 auto',
+        padding: 'calc(env(safe-area-inset-top, 0px) + 32px) 20px 40px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}>
-        <Link href="/" aria-label="Pikibu" style={{ alignSelf: 'flex-start', marginBottom: '36px' }}>
-          <BrandMark />
+        {/* Radiant Brand Header: Logo + "Pikibu" text + Badge */}
+        <Link
+          href="/"
+          aria-label="Pikibu Ana Sayfa"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '16px',
+            textDecoration: 'none',
+            marginBottom: '28px',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <BrandMark size={58} />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{
+                fontSize: '30px',
+                fontWeight: 800,
+                letterSpacing: '-0.04em',
+                background: 'linear-gradient(135deg, #FF5388 0%, #FF7E67 55%, #FF9F0A 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block',
+                lineHeight: 1.1,
+              }}>
+                Pikibu
+              </span>
+              <span style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '0.02em',
+                padding: '3px 8px',
+                borderRadius: '9999px',
+                background: 'rgba(255, 83, 136, 0.12)',
+                color: '#FF375F',
+                border: '1px solid rgba(255, 83, 136, 0.24)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}>
+                ✨ Bebek Takibi
+              </span>
+            </div>
+            <p style={{
+              fontSize: '13px',
+              color: 'var(--text-muted)',
+              margin: '3px 0 0',
+              fontWeight: 500,
+              letterSpacing: '-0.01em',
+            }}>
+              Akıllı Ebeveyn & Uyku Asistanı
+            </p>
+          </div>
         </Link>
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '34px', fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.08 }}>{title}</h1>
-          {subtitle && (
-            <p style={{ marginTop: '10px', fontSize: '17px', color: 'var(--text-muted)', letterSpacing: '-0.015em', lineHeight: 1.45 }}>{subtitle}</p>
-          )}
+
+        {/* Floating Card Container */}
+        <div style={{
+          background: 'var(--bg-surface)',
+          borderRadius: '26px',
+          padding: '28px 24px',
+          border: '1px solid var(--border-light)',
+          boxShadow: '0 20px 48px -12px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02)',
+          backdropFilter: 'blur(20px)',
+        }}>
+          <div style={{ marginBottom: '24px' }}>
+            <h1 style={{
+              fontSize: '26px',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              color: 'var(--text-primary)',
+              lineHeight: 1.2,
+              margin: 0,
+            }}>
+              {title}
+            </h1>
+            {subtitle && (
+              <p style={{
+                marginTop: '8px',
+                fontSize: '15px',
+                color: 'var(--text-muted)',
+                letterSpacing: '-0.015em',
+                lineHeight: 1.45,
+                margin: '8px 0 0',
+              }}>
+                {subtitle}
+              </p>
+            )}
+          </div>
+
+          <div>{children}</div>
         </div>
-        <div>{children}</div>
-        {footer && <div style={{ marginTop: 'auto', paddingTop: '32px' }}>{footer}</div>}
+
+        {footer && <div style={{ paddingTop: '24px' }}>{footer}</div>}
       </div>
     </div>
   )
@@ -64,9 +207,9 @@ export function AuthShell({
 
 export function Divider({ label }: { label: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', margin: '28px 0' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', margin: '22px 0' }}>
       <div style={{ flex: 1, height: '0.5px', background: 'var(--border-medium)' }} />
-      <span style={{ fontSize: '13px', color: 'var(--text-subtle)' }}>{label}</span>
+      <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-subtle)' }}>{label}</span>
       <div style={{ flex: 1, height: '0.5px', background: 'var(--border-medium)' }} />
     </div>
   )
@@ -80,8 +223,14 @@ export function GoogleButton({ label, onClick }: { label: string; onClick: () =>
       onClick={onClick}
       className="btn btn-block pressable"
       style={{
-        height: '54px', background: 'var(--bg-surface)', color: 'var(--text-primary)',
-        border: '0.5px solid var(--border-medium)', gap: '10px', fontWeight: 500,
+        height: '50px',
+        background: 'var(--bg-raised)',
+        color: 'var(--text-primary)',
+        border: '1px solid var(--border-medium)',
+        gap: '10px',
+        fontWeight: 500,
+        fontSize: '15px',
+        borderRadius: '14px',
       }}
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -99,10 +248,14 @@ export function Notice({ tone = 'error', children }: { tone?: 'error' | 'warning
   const color = tone === 'error' ? 'var(--danger)' : tone === 'warning' ? 'var(--butter-dark)' : 'var(--sage-dark)'
   return (
     <div role="alert" className="animate-slide-down" style={{
-      display: 'flex', alignItems: 'flex-start', gap: '10px',
-      padding: '14px 16px', borderRadius: '14px', marginBottom: '20px',
-      background: 'var(--bg-surface)', border: '0.5px solid var(--border-medium)',
-      boxShadow: 'var(--shadow-sm)',
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '10px',
+      padding: '12px 14px',
+      borderRadius: '14px',
+      marginBottom: '18px',
+      background: 'rgba(255, 59, 48, 0.08)',
+      border: '1px solid rgba(255, 59, 48, 0.2)',
     }}>
       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: color, marginTop: '6px', flexShrink: 0 }} />
       <span style={{ fontSize: '14px', color: 'var(--text-primary)', lineHeight: 1.45 }}>{children}</span>

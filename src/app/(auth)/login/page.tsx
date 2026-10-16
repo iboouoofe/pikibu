@@ -40,12 +40,12 @@ function LoginPageInner() {
 
   return (
     <AuthShell
-      title="Tekrar hoş geldiniz."
-      subtitle="Bebeğinizin gelişimini takip etmeye kaldığınız yerden devam edin."
+      title="Giriş Yapın 🧸"
+      subtitle="Bebeğinizin uyku, beslenme ve atak haftalarını takip edin."
       footer={
         <p style={{ textAlign: 'center', fontSize: '15px', color: 'var(--text-muted)' }}>
           Hesabınız yok mu?{' '}
-          <Link href="/register" id="go-register" style={{ color: 'var(--accent)', fontWeight: 500 }}>
+          <Link href="/register" id="go-register" style={{ color: '#FF375F', fontWeight: 600 }}>
             Hesap oluşturun
           </Link>
         </p>
@@ -66,13 +66,27 @@ function LoginPageInner() {
           <input id="login-password" className="input" type="password" name="password" required autoComplete="current-password" placeholder="Şifre" aria-label="Şifre" defaultValue="123456" />
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '4px 0 28px' }}>
-          <Link href="/forgot-password" style={{ fontSize: '14px', color: 'var(--accent)' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '4px 0 24px' }}>
+          <Link href="/forgot-password" style={{ fontSize: '14px', color: '#FF375F', fontWeight: 500 }}>
             Şifrenizi mi unuttunuz?
           </Link>
         </div>
 
-        <button id="login-submit" type="submit" className="btn btn-primary btn-block pressable" style={{ height: '54px' }}>
+        <button
+          id="login-submit"
+          type="submit"
+          className="btn btn-primary btn-block pressable"
+          style={{
+            height: '52px',
+            background: 'linear-gradient(135deg, #FF6B8B 0%, #FF5388 50%, #E63956 100%)',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '14px',
+            fontSize: '16px',
+            fontWeight: 600,
+            boxShadow: '0 8px 20px -4px rgba(255, 83, 136, 0.4)',
+          }}
+        >
           Giriş yap <ArrowRight size={18} />
         </button>
       </form>
@@ -84,9 +98,10 @@ function LoginPageInner() {
             className="btn btn-block pressable"
             style={{
               height: '48px',
-              background: 'rgba(0,113,227,0.08)',
-              color: 'var(--coral)',
-              border: '1px solid rgba(0,113,227,0.2)',
+              background: 'linear-gradient(135deg, rgba(255, 107, 139, 0.12) 0%, rgba(255, 142, 83, 0.12) 100%)',
+              color: '#FF375F',
+              border: '1.5px solid rgba(255, 83, 136, 0.28)',
+              borderRadius: '14px',
               fontWeight: 600,
               fontSize: '15px',
             }}
