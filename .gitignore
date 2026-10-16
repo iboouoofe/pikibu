@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scratch & temp
+scratch/
+
+# agent & ide files
+.agents/
+.claude/
+.cursor/
+.devin/
+
+

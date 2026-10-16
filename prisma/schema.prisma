@@ -1,0 +1,252 @@
+// This is your Prisma schema file for Pikibu
+// Prisma v8 — PostgreSQL (Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubTier {
+  FREE
+  PREMIUM
+}
+
+enum FeedingType {
+  BREAST_LEFT
+  BREAST_RIGHT
+  BOTTLE_FORMULA
+  BOTTLE_MILK
+  SOLID
+}
+
+enum DiaperType {
+  WET
+  DIRTY
+  BOTH
+  DRY
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String?
+  avatarUrl    String?
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  baby         Baby?
+  subscription Subscription?
+
+  @@map("users")
+}
+
+model Subscription {
+  id        String    @id @default(uuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tier      SubTier   @default(FREE)
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+  provider  String? // "STRIPE", "REVENUECAT", "APPLE", "GOOGLE"
+  externalId String? // RevenueCat or Stripe subscription ID
+
+  @@map("subscriptions")
+}
+
+model Baby {
+  id          String       @id @default(uuid())
+  userId      String       @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  birthDate   DateTime
+  isPremature Boolean      @default(false)
+  dueDate     DateTime?
+  gender      String? // "female", "male"
+  birthWeight Float?
+  birthHeight Float?
+  headCirc    Float?
+  photoUrl    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  sleepLogs   SleepLog[]
+  feedingLogs FeedingLog[]
+  diaperLogs  DiaperLog[]
+  healthLogs  HealthLog[]
+  allergyLogs AllergyLog[]
+
+  @@map("babies")
+}
+
+model SleepLog {
+  id        String    @id @default(uuid())
+  babyId    String
+  baby      Baby      @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime   DateTime?
+  isNight   Boolean   @default(false)
+  notes     String?
+  createdAt DateTime  @default(now())
+
+  @@index([babyId, startTime])
+  @@map("sleep_logs")
+}
+
+model FeedingLog {
+  id          String      @id @default(uuid())
+  babyId      String
+  baby        Baby        @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  type        FeedingType
+  amountMl    Int?
+  durationSec Int?
+  side        String? // "LEFT", "RIGHT" for breast
+  notes       String?
+  loggedAt    DateTime    @default(now())
+  createdAt   DateTime    @default(now())
+
+  @@index([babyId, loggedAt])
+  @@map("feeding_logs")
+}
+
+model DiaperLog {
+  id          String     @id @default(uuid())
+  babyId      String
+  baby        Baby       @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  type        DiaperType
+  consistency String? // "liquid", "soft", "normal", "hard"
+  color       String? // "yellow", "green", "brown", "black"
+  notes       String?
+  loggedAt    DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+
+  @@index([babyId, loggedAt])
+  @@map("diaper_logs")
+}
+
+model HealthLog {
+  id           String   @id @default(uuid())
+  babyId       String
+  baby         Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  temperature  Float?
+  medicineName String?
+  dosageMl     Float?
+  notes        String?
+  loggedAt     DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  @@index([babyId, loggedAt])
+  @@map("health_logs")
+}
+
+model SolidFood {
+  id            String       @id @default(uuid())
+  name          String
+  nameTr        String
+  minMonth      Int
+  maxMonth      Int?
+  allergenLevel Int // 1: Low, 2: Medium, 3: High
+  allergens     String[] // ["gluten", "dairy", "egg", "nut", "fish", "shellfish", "soy"]
+  servingGuide  String
+  servingTips   String?
+  imageUrl      String?
+  category      String? // "vegetable", "fruit", "protein", "grain", "dairy"
+  isActive      Boolean      @default(true)
+  recipes       Recipe[]
+  allergyLogs   AllergyLog[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("solid_foods")
+}
+
+model Recipe {
+  id           String    @id @default(uuid())
+  foodId       String
+  food         SolidFood @relation(fields: [foodId], references: [id])
+  title        String
+  ingredients  String[]
+  instructions String
+  imageUrl     String?
+  minMonth     Int
+  prepMins     Int?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("recipes")
+}
+
+model AllergyLog {
+  id       String    @id @default(uuid())
+  babyId   String
+  baby     Baby      @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  foodId   String
+  food     SolidFood @relation(fields: [foodId], references: [id])
+  reaction String?
+  severity Int? // 1-5
+  testedAt DateTime  @default(now())
+
+  @@map("allergy_logs")
+}
+
+model LeapWeek {
+  id             Int      @id // 1-10 mental leaps
+  title          String
+  titleTr        String
+  startWeek      Int
+  endWeek        Int
+  description    String
+  descriptionTr  String
+  symptoms       String
+  symptomsTr     String
+  soothingTips   String
+  soothingTipsTr String
+  cognitiveSkills String?
+  cognitiveSkillsTr String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("leap_weeks")
+}
+
+model VaccineSchedule {
+  id          String   @id @default(uuid())
+  name        String
+  nameTr      String
+  ageMonths   Int
+  isPremium   Boolean  @default(false) // Private vaccines require premium
+  description String?
+  sideEffects String?
+  doctorQs    String? // Questions to ask doctor
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("vaccine_schedules")
+}
+
+model Notification {
+  id            String    @id @default(uuid())
+  title         String
+  body          String
+  targetSegment String? // "all", "4months", "6months", "premium"
+  sentAt        DateTime?
+  scheduledAt   DateTime?
+  sentBy        String? // admin userId
+  clickCount    Int       @default(0)
+  createdAt     DateTime  @default(now())
+
+  @@map("notifications")
+}
