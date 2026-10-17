@@ -42,6 +42,8 @@ next-env.d.ts
 
 # scratch & temp
 scratch/
+android-release/
+
 
 # agent & ide files
 .agents/
