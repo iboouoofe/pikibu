@@ -9,8 +9,12 @@ export async function login(formData: FormData) {
   const email = (formData.get('email') as string)?.trim()
   const password = formData.get('password') as string
 
-  // If user enters demo credentials or clicks demo
-  if (email === 'demo@pikibu.app') {
+  if (!email || !password) {
+    redirect('/login?error=missing_fields')
+  }
+
+  // If user enters demo credentials
+  if (email === 'demo@pikibu.app' && password === '123456') {
     const cookieStore = await cookies()
     cookieStore.set('pikibu_demo_session', 'true', {
       path: '/',

@@ -6,12 +6,24 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/dashboard'
+  const error = searchParams.get('error')
+  const errorDescription = searchParams.get('error_description')
+
+  if (error) {
+    console.error('Google OAuth callback error received:', { error, errorDescription })
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(errorDescription || error)}`)
+  }
 
   if (code) {
     const supabase = await createClient()
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error && data?.user) {
+    if (exchangeError) {
+      console.error('Error exchanging OAuth code for session:', exchangeError)
+      return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(exchangeError.message || 'google_auth_failed')}`)
+    }
+
+    if (data?.user) {
       const user = data.user
       const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Kullanıcı'
       const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture || null

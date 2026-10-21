@@ -24,8 +24,12 @@ function LoginPageInner() {
     ? 'E-posta adresinizi henüz onaylamadınız. Lütfen gelen kutunuzu kontrol edin.'
     : errorCode === 'invalid_credentials'
     ? 'E-posta veya şifre hatalı. Lütfen tekrar deneyin.'
+    : errorCode === 'missing_fields'
+    ? 'Lütfen e-posta adresinizi ve şifrenizi girin.'
+    : errorCode === 'google_auth_failed'
+    ? 'Google ile giriş tamamlanamadı. Lütfen hesabınızı kontrol edin veya e-posta ile giriş yapın.'
     : errorCode
-    ? errorCode
+    ? decodeURIComponent(errorCode)
     : null
 
   const handleOAuth = async (provider: 'google') => {
@@ -58,12 +62,12 @@ function LoginPageInner() {
       <form action={login}>
         <div className="form-group input-icon-wrap">
           <Mail size={18} strokeWidth={1.8} />
-          <input id="login-email" className="input" type="email" name="email" required autoComplete="email" placeholder="E-posta" aria-label="E-posta" defaultValue="demo@pikibu.app" />
+          <input id="login-email" className="input" type="email" name="email" required autoComplete="email" placeholder="E-posta adresiniz" aria-label="E-posta" />
         </div>
 
         <div className="form-group input-icon-wrap">
           <Lock size={18} strokeWidth={1.8} />
-          <input id="login-password" className="input" type="password" name="password" required autoComplete="current-password" placeholder="Şifre" aria-label="Şifre" defaultValue="123456" />
+          <input id="login-password" className="input" type="password" name="password" required autoComplete="current-password" placeholder="Şifreniz" aria-label="Şifre" />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '4px 0 24px' }}>
